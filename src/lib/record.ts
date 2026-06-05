@@ -110,6 +110,49 @@ export function sortByDateDesc(records: GiftRecord[]): GiftRecord[] {
     .map((k) => k.record);
 }
 
+export type SortMode = 'date-desc' | 'date-asc' | 'amount-desc' | 'person';
+
+export const SORT_LABELS: Record<SortMode, string> = {
+  'date-desc': '日付が新しい順',
+  'date-asc': '日付が古い順',
+  'amount-desc': '金額が高い順',
+  person: '相手の名前順',
+};
+
+export function isSortMode(value: unknown): value is SortMode {
+  return (
+    value === 'date-desc' || value === 'date-asc' || value === 'amount-desc' || value === 'person'
+  );
+}
+
+/**
+ * 表示用の並べ替え。元配列は変更しない。安定ソートを使い、比較が同値の
+ * ときは元の順序(保存時の新しい日付順)を保つ。
+ */
+export function sortRecords(records: GiftRecord[], mode: SortMode): GiftRecord[] {
+  const indexed = records.map((record, index) => ({ record, index }));
+  const tie = (a: { index: number }, b: { index: number }): number => a.index - b.index;
+  switch (mode) {
+    case 'date-asc':
+      return indexed
+        .sort((a, b) => a.record.date.localeCompare(b.record.date) || tie(a, b))
+        .map((k) => k.record);
+    case 'amount-desc':
+      return indexed
+        .sort((a, b) => b.record.amount - a.record.amount || tie(a, b))
+        .map((k) => k.record);
+    case 'person':
+      return indexed
+        .sort((a, b) => a.record.person.localeCompare(b.record.person, 'ja') || tie(a, b))
+        .map((k) => k.record);
+    case 'date-desc':
+    default:
+      return indexed
+        .sort((a, b) => b.record.date.localeCompare(a.record.date) || tie(a, b))
+        .map((k) => k.record);
+  }
+}
+
 export interface RecordStore {
   load(): GiftRecord[] | null;
   save(records: GiftRecord[]): void;
