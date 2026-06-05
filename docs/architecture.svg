@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 470" role="img" aria-labelledby="arch-title">
+  <title id="arch-title">okurimonoの構成図。UI層がロジック層の4モジュール(record・okaeshi・person・csv)を呼び、台帳はlocalStorageに保存される。</title>
+  <style>
+    .box { fill: #fdfbfa; stroke: #e5ddd8; stroke-width: 1.5; }
+    .layer { fill: #f6f3f1; stroke: #e5ddd8; stroke-width: 1.5; }
+    .chip { fill: #f4e2e4; stroke: none; }
+    .name { fill: #28221f; font: 600 15px system-ui, sans-serif; }
+    .label { fill: #71655f; font: 13px system-ui, sans-serif; }
+    .chip-text { fill: #94434b; font: 600 13px system-ui, sans-serif; }
+    .layer-name { fill: #94434b; font: 700 13px system-ui, sans-serif; letter-spacing: 0.08em; }
+    .edge { stroke: #71655f; stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+    .edge-label { fill: #71655f; font: 12px system-ui, sans-serif; }
+    #arrow path { fill: #71655f; }
+    @media (prefers-color-scheme: dark) {
+      .box { fill: #231f1e; stroke: #393230; }
+      .layer { fill: #1a1716; stroke: #393230; }
+      .chip { fill: #3c2a2c; }
+      .name { fill: #ebe4e1; }
+      .label { fill: #a4978f; }
+      .chip-text { fill: #d98a92; }
+      .layer-name { fill: #d98a92; }
+      .edge { stroke: #a4978f; }
+      .edge-label { fill: #a4978f; }
+      #arrow path { fill: #a4978f; }
+    }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z"/>
+    </marker>
+  </defs>
+
+  <rect class="layer" x="40" y="32" width="800" height="128" rx="14"/>
+  <text class="layer-name" x="64" y="60">UI層(app.ts / main.ts)</text>
+  <text class="label" x="64" y="82">1画面の台帳。変更はchangeイベントで確定し、記録は常に新しい日付順で描き直す</text>
+  <rect class="chip" x="64" y="100" width="120" height="32" rx="16"/>
+  <text class="chip-text" x="124" y="121" text-anchor="middle">お返し待ち</text>
+  <rect class="chip" x="196" y="100" width="140" height="32" rx="16"/>
+  <text class="chip-text" x="266" y="121" text-anchor="middle">相手ごとの集計</text>
+  <rect class="chip" x="348" y="100" width="150" height="32" rx="16"/>
+  <text class="chip-text" x="423" y="121" text-anchor="middle">記録の台帳・検索</text>
+
+  <path class="edge" d="M150 160 V224"/>
+  <path class="edge" d="M345 160 V224"/>
+  <path class="edge" d="M540 160 V224"/>
+  <path class="edge" d="M730 160 V224"/>
+
+  <rect class="box" x="60" y="228" width="180" height="96" rx="14"/>
+  <text class="name" x="150" y="262" text-anchor="middle">record.ts</text>
+  <text class="label" x="150" y="286" text-anchor="middle">記録の型・検証・</text>
+  <text class="label" x="150" y="306" text-anchor="middle">並べ替え・永続化</text>
+
+  <rect class="box" x="255" y="228" width="180" height="96" rx="14"/>
+  <text class="name" x="345" y="262" text-anchor="middle">okaeshi.ts</text>
+  <text class="label" x="345" y="286" text-anchor="middle">お返し待ちの抽出と</text>
+  <text class="label" x="345" y="306" text-anchor="middle">半返しの目安計算</text>
+
+  <rect class="box" x="450" y="228" width="180" height="96" rx="14"/>
+  <text class="name" x="540" y="262" text-anchor="middle">person.ts</text>
+  <text class="label" x="540" y="286" text-anchor="middle">相手ごとの件数と</text>
+  <text class="label" x="540" y="306" text-anchor="middle">金額の集計</text>
+
+  <rect class="box" x="645" y="228" width="180" height="96" rx="14"/>
+  <text class="name" x="735" y="262" text-anchor="middle">csv.ts</text>
+  <text class="label" x="735" y="286" text-anchor="middle">BOM付きCSVの</text>
+  <text class="label" x="735" y="306" text-anchor="middle">書き出し</text>
+
+  <path class="edge" d="M150 324 V388"/>
+  <text class="edge-label" x="162" y="362">保存・復元</text>
+  <path class="edge" d="M735 324 V388"/>
+  <text class="edge-label" x="747" y="362">コピー・保存</text>
+
+  <rect class="box" x="60" y="392" width="180" height="48" rx="14"/>
+  <text class="name" x="150" y="421" text-anchor="middle">localStorage</text>
+
+  <rect class="box" x="645" y="392" width="180" height="48" rx="14"/>
+  <text class="name" x="735" y="421" text-anchor="middle">CSVファイル</text>
+</svg>
