@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest';
 import {
   createStore,
   deserializeRecords,
+  isSortMode,
   serializeRecords,
   sortByDateDesc,
+  sortRecords,
   type GiftRecord,
 } from './record';
 import { seedRecords } from './seed';
@@ -56,6 +58,40 @@ describe('sortByDateDesc', () => {
       record({ id: 'd', date: '2025-12-31' }),
     ];
     expect(sortByDateDesc(records).map((r) => r.id)).toEqual(['b', 'c', 'a', 'd']);
+  });
+});
+
+describe('sortRecords', () => {
+  const records = [
+    record({ id: 'a', date: '2026-01-01', amount: 5000, person: 'さとう' }),
+    record({ id: 'b', date: '2026-06-01', amount: 30000, person: 'たなか' }),
+    record({ id: 'c', date: '2025-12-31', amount: 10000, person: 'あべ' }),
+  ];
+
+  it('日付の新しい順・古い順', () => {
+    expect(sortRecords(records, 'date-desc').map((r) => r.id)).toEqual(['b', 'a', 'c']);
+    expect(sortRecords(records, 'date-asc').map((r) => r.id)).toEqual(['c', 'a', 'b']);
+  });
+
+  it('金額の高い順', () => {
+    expect(sortRecords(records, 'amount-desc').map((r) => r.id)).toEqual(['b', 'c', 'a']);
+  });
+
+  it('相手の名前順', () => {
+    expect(sortRecords(records, 'person').map((r) => r.id)).toEqual(['c', 'a', 'b']);
+  });
+
+  it('元の配列を変更しない', () => {
+    const before = records.map((r) => r.id);
+    sortRecords(records, 'amount-desc');
+    expect(records.map((r) => r.id)).toEqual(before);
+  });
+});
+
+describe('isSortMode', () => {
+  it('既知のモードだけ受け入れる', () => {
+    expect(isSortMode('amount-desc')).toBe(true);
+    expect(isSortMode('color')).toBe(false);
   });
 });
 
