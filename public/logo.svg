@@ -1,20 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="logo-title">
-  <title id="logo-title">okurimono - 水引を結んだのし袋のロゴ</title>
+  <title id="logo-title">okurimono - 水引を結んだロゴ</title>
   <style>
-    .bg { fill: #f6f3f1; }
-    .ink { stroke: #28221f; }
-    .accent { stroke: #94434b; }
+    .bg { fill: #f4f1ec; }
+    .accent { stroke: #9a3b46; }
     @media (prefers-color-scheme: dark) {
-      .bg { fill: #1a1716; }
-      .ink { stroke: #ebe4e1; }
-      .accent { stroke: #d98a92; }
+      .bg { fill: #181513; }
+      .accent { stroke: #d98a8f; }
     }
   </style>
-  <rect class="bg" width="128" height="128" rx="28"/>
-  <g fill="none" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-    <rect class="ink" x="38" y="18" width="52" height="92" rx="6"/>
-    <path class="ink" d="M38 34 54 18"/>
-    <path class="accent" d="M38 64h14c4 0 4-7 0-7s-8 7 0 14c8-7 4-14 0-14"/>
-    <path class="accent" d="M90 64H76c-4 0-4-7 0-7s8 7 0 14c-8-7-4-14 0-14"/>
+  <rect class="bg" width="128" height="128" rx="28" />
+  <g class="accent" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M64 60C44 16 84 16 64 60Z" />
+    <path d="M64 60C16 40 16 80 64 60Z" />
+    <path d="M64 60C112 40 112 80 64 60Z" />
+    <path d="M58 62 47 108" />
+    <path d="M70 62 81 108" />
   </g>
 </svg>
