@@ -3,6 +3,7 @@ import {
   createStore,
   deserializeRecords,
   isSortMode,
+  recordYears,
   serializeRecords,
   sortByDateDesc,
   sortRecords,
@@ -92,6 +93,21 @@ describe('isSortMode', () => {
   it('既知のモードだけ受け入れる', () => {
     expect(isSortMode('amount-desc')).toBe(true);
     expect(isSortMode('color')).toBe(false);
+  });
+});
+
+describe('recordYears', () => {
+  it('含まれる年を新しい順・重複なしで返す', () => {
+    const years = recordYears([
+      record({ date: '2026-04-12' }),
+      record({ date: '2025-12-10' }),
+      record({ date: '2026-01-01' }),
+    ]);
+    expect(years).toEqual(['2026', '2025']);
+  });
+
+  it('記録がなければ空', () => {
+    expect(recordYears([])).toEqual([]);
   });
 });
 
