@@ -1,78 +1,79 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 470" role="img" aria-labelledby="arch-title">
-  <title id="arch-title">okurimonoの構成図。UI層がロジック層の4モジュール(record・okaeshi・person・csv)を呼び、台帳はlocalStorageに保存される。</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" role="img" aria-labelledby="arch-title">
+  <title id="arch-title">okurimonoの構成図。UI層(app・main・motion)が純関数のロジック層(record・okaeshi・person・stats・csv・backup・theme)を呼び、記録とテーマはlocalStorageに、書き出しはJSON/CSVファイルに渡る。</title>
   <style>
-    .box { fill: #fdfbfa; stroke: #e5ddd8; stroke-width: 1.5; }
-    .layer { fill: #f6f3f1; stroke: #e5ddd8; stroke-width: 1.5; }
-    .chip { fill: #f4e2e4; stroke: none; }
-    .name { fill: #28221f; font: 600 15px system-ui, sans-serif; }
-    .label { fill: #71655f; font: 13px system-ui, sans-serif; }
-    .chip-text { fill: #94434b; font: 600 13px system-ui, sans-serif; }
-    .layer-name { fill: #94434b; font: 700 13px system-ui, sans-serif; letter-spacing: 0.08em; }
-    .edge { stroke: #71655f; stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
-    .edge-label { fill: #71655f; font: 12px system-ui, sans-serif; }
-    #arrow path { fill: #71655f; }
+    .box { fill: #faf7f2; stroke: #e2dacd; stroke-width: 1.5; }
+    .layer { fill: #efe9e1; stroke: #e2dacd; stroke-width: 1.5; }
+    .name { fill: #2a2420; font: 600 15px system-ui, sans-serif; }
+    .label { fill: #6b5f57; font: 12px system-ui, sans-serif; }
+    .layer-name { fill: #9a3b46; font: 700 12px system-ui, sans-serif; letter-spacing: 0.16em; }
+    .edge { stroke: #75685e; stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+    .edge-label { fill: #75685e; font: 12px system-ui, sans-serif; }
+    #arrow path { fill: #75685e; }
     @media (prefers-color-scheme: dark) {
-      .box { fill: #231f1e; stroke: #393230; }
-      .layer { fill: #1a1716; stroke: #393230; }
-      .chip { fill: #3c2a2c; }
-      .name { fill: #ebe4e1; }
-      .label { fill: #a4978f; }
-      .chip-text { fill: #d98a92; }
-      .layer-name { fill: #d98a92; }
-      .edge { stroke: #a4978f; }
-      .edge-label { fill: #a4978f; }
-      #arrow path { fill: #a4978f; }
+      .box { fill: #211c19; stroke: #322c27; }
+      .layer { fill: #14110f; stroke: #322c27; }
+      .name { fill: #ece4dc; }
+      .label { fill: #a99d92; }
+      .layer-name { fill: #d98a8f; }
+      .edge { stroke: #908377; }
+      .edge-label { fill: #908377; }
+      #arrow path { fill: #908377; }
     }
   </style>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0 0 L10 5 L0 10 z"/>
+      <path d="M0 0 L10 5 L0 10 z" />
     </marker>
   </defs>
 
-  <rect class="layer" x="40" y="32" width="800" height="128" rx="14"/>
-  <text class="layer-name" x="64" y="60">UI層(app.ts / main.ts)</text>
-  <text class="label" x="64" y="82">1画面の台帳。変更はchangeイベントで確定し、記録は常に新しい日付順で描き直す</text>
-  <rect class="chip" x="64" y="100" width="120" height="32" rx="16"/>
-  <text class="chip-text" x="124" y="121" text-anchor="middle">お返し待ち</text>
-  <rect class="chip" x="196" y="100" width="140" height="32" rx="16"/>
-  <text class="chip-text" x="266" y="121" text-anchor="middle">相手ごとの集計</text>
-  <rect class="chip" x="348" y="100" width="150" height="32" rx="16"/>
-  <text class="chip-text" x="423" y="121" text-anchor="middle">記録の台帳・検索</text>
+  <!-- UI層 -->
+  <rect class="layer" x="40" y="28" width="820" height="116" rx="12" />
+  <text class="layer-name" x="64" y="54">UI 層</text>
+  <rect class="box" x="64" y="68" width="232" height="60" rx="10" />
+  <text class="name" x="180" y="96" text-anchor="middle">app.ts</text>
+  <text class="label" x="180" y="116" text-anchor="middle">骨格を一度描き、領域だけ更新</text>
+  <rect class="box" x="310" y="68" width="232" height="60" rx="10" />
+  <text class="name" x="426" y="96" text-anchor="middle">main.ts</text>
+  <text class="label" x="426" y="116" text-anchor="middle">起動・種まき・テーマ適用</text>
+  <rect class="box" x="556" y="68" width="240" height="60" rx="10" />
+  <text class="name" x="676" y="96" text-anchor="middle">motion.ts</text>
+  <text class="label" x="676" y="116" text-anchor="middle">GSAPの入場・カウントアップ</text>
 
-  <path class="edge" d="M150 160 V224"/>
-  <path class="edge" d="M345 160 V224"/>
-  <path class="edge" d="M540 160 V224"/>
-  <path class="edge" d="M730 160 V224"/>
+  <path class="edge" d="M260 144 V196" />
+  <path class="edge" d="M450 144 V196" />
+  <path class="edge" d="M640 144 V196" />
 
-  <rect class="box" x="60" y="228" width="180" height="96" rx="14"/>
-  <text class="name" x="150" y="262" text-anchor="middle">record.ts</text>
-  <text class="label" x="150" y="286" text-anchor="middle">記録の型・検証・</text>
-  <text class="label" x="150" y="306" text-anchor="middle">並べ替え・永続化</text>
+  <!-- ロジック層(純関数) -->
+  <rect class="layer" x="40" y="200" width="820" height="160" rx="12" />
+  <text class="layer-name" x="64" y="226">ロジック層 — 純関数・DOM非依存</text>
 
-  <rect class="box" x="255" y="228" width="180" height="96" rx="14"/>
-  <text class="name" x="345" y="262" text-anchor="middle">okaeshi.ts</text>
-  <text class="label" x="345" y="286" text-anchor="middle">お返し待ちの抽出と</text>
-  <text class="label" x="345" y="306" text-anchor="middle">半返しの目安計算</text>
+  <rect class="box" x="64" y="240" width="185" height="44" rx="10" />
+  <text class="name" x="156" y="267" text-anchor="middle">record.ts</text>
+  <rect class="box" x="263" y="240" width="185" height="44" rx="10" />
+  <text class="name" x="355" y="267" text-anchor="middle">okaeshi.ts</text>
+  <rect class="box" x="462" y="240" width="185" height="44" rx="10" />
+  <text class="name" x="554" y="267" text-anchor="middle">person.ts</text>
+  <rect class="box" x="661" y="240" width="135" height="44" rx="10" />
+  <text class="name" x="728" y="267" text-anchor="middle">stats.ts</text>
 
-  <rect class="box" x="450" y="228" width="180" height="96" rx="14"/>
-  <text class="name" x="540" y="262" text-anchor="middle">person.ts</text>
-  <text class="label" x="540" y="286" text-anchor="middle">相手ごとの件数と</text>
-  <text class="label" x="540" y="306" text-anchor="middle">金額の集計</text>
+  <rect class="box" x="64" y="300" width="185" height="44" rx="10" />
+  <text class="name" x="156" y="327" text-anchor="middle">csv.ts</text>
+  <rect class="box" x="263" y="300" width="185" height="44" rx="10" />
+  <text class="name" x="355" y="327" text-anchor="middle">backup.ts</text>
+  <rect class="box" x="462" y="300" width="185" height="44" rx="10" />
+  <text class="name" x="554" y="327" text-anchor="middle">theme.ts</text>
+  <text class="label" x="661" y="320">型・検証・集計・お返し・</text>
+  <text class="label" x="661" y="338">取り込み・テーマを分離</text>
 
-  <rect class="box" x="645" y="228" width="180" height="96" rx="14"/>
-  <text class="name" x="735" y="262" text-anchor="middle">csv.ts</text>
-  <text class="label" x="735" y="286" text-anchor="middle">BOM付きCSVの</text>
-  <text class="label" x="735" y="306" text-anchor="middle">書き出し</text>
+  <path class="edge" d="M156 360 V416" />
+  <text class="edge-label" x="168" y="392">保存・復元</text>
+  <path class="edge" d="M554 360 V416" />
+  <text class="edge-label" x="566" y="392">書き出し・取り込み</text>
 
-  <path class="edge" d="M150 324 V388"/>
-  <text class="edge-label" x="162" y="362">保存・復元</text>
-  <path class="edge" d="M735 324 V388"/>
-  <text class="edge-label" x="747" y="362">コピー・保存</text>
+  <!-- 保存・入出力 -->
+  <rect class="box" x="64" y="420" width="280" height="48" rx="10" />
+  <text class="name" x="204" y="449" text-anchor="middle">localStorage(記録・テーマ)</text>
 
-  <rect class="box" x="60" y="392" width="180" height="48" rx="14"/>
-  <text class="name" x="150" y="421" text-anchor="middle">localStorage</text>
-
-  <rect class="box" x="645" y="392" width="180" height="48" rx="14"/>
-  <text class="name" x="735" y="421" text-anchor="middle">CSVファイル</text>
+  <rect class="box" x="462" y="420" width="280" height="48" rx="10" />
+  <text class="name" x="602" y="449" text-anchor="middle">JSON / CSV ファイル</text>
 </svg>
