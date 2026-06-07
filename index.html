@@ -5,12 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="冠婚葬祭・贈答の記録帳。やりとりの履歴を相手ごとにたどり、お返しの未対応と金額の目安が分かる"
+      content="冠婚葬祭・贈答の記録帳。誰に何をいくら贈り、いただいたかを一冊にまとめ、お返しの抜けと金額の目安を見通す。記録は端末内だけに保存"
     />
-    <meta name="theme-color" content="#f6f3f1" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1a1716" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f4f1ec" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#181513" media="(prefers-color-scheme: dark)" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <title>okurimono | 贈答の記録帳</title>
+    <script>
+      // 描画前にテーマを確定し、明示指定時のちらつきを防ぐ。autoはCSSのメディアクエリに任せる。
+      (function () {
+        try {
+          var pref = localStorage.getItem('okurimono.theme.v1');
+          if (pref === 'light' || pref === 'dark') {
+            document.documentElement.setAttribute('data-theme', pref);
+          }
+        } catch (e) {
+          /* localStorageが使えない環境では何もしない */
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>
