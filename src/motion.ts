@@ -45,6 +45,22 @@ export function revealOnMount(root: HTMLElement): void {
       scrollTrigger: { trigger: el, start: 'top 86%', once: true },
     });
   }
+
+  // マストヘッドの写真をスクロールに合わせてわずかに動かす(視差)。
+  const img = root.querySelector('.masthead-figure img');
+  const masthead = root.querySelector('.masthead');
+  if (img && masthead) {
+    gsap.fromTo(
+      img,
+      { yPercent: -5, scale: 1.08 },
+      {
+        yPercent: 5,
+        scale: 1.08,
+        ease: 'none',
+        scrollTrigger: { trigger: masthead, start: 'top top', end: 'bottom top', scrub: true },
+      },
+    );
+  }
 }
 
 /** data-num を持つ数値を 0 から目標値まで数え上げる。 */

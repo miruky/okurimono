@@ -125,6 +125,16 @@ export function isSortMode(value: unknown): value is SortMode {
   );
 }
 
+/** 記録に含まれる年(YYYY)を新しい順の重複なしで返す。年での絞り込みに使う */
+export function recordYears(records: GiftRecord[]): string[] {
+  const years = new Set<string>();
+  for (const r of records) {
+    const y = r.date.slice(0, 4);
+    if (/^\d{4}$/.test(y)) years.add(y);
+  }
+  return [...years].sort((a, b) => b.localeCompare(a));
+}
+
 /**
  * 表示用の並べ替え。元配列は変更しない。安定ソートを使い、比較が同値の
  * ときは元の順序(保存時の新しい日付順)を保つ。

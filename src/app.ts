@@ -9,6 +9,7 @@ import {
   newRecordId,
   RETURN_LABELS,
   SORT_LABELS,
+  recordYears,
   serializeRecords,
   sortByDateDesc,
   sortRecords,
@@ -84,7 +85,9 @@ export function createApp({ root, store, initialRecords, today, theme }: AppDeps
   let records = sortByDateDesc(initialRecords);
   let personQuery = '';
   let filterDirection: Direction | '' = '';
+  let filterYear = '';
   let sortMode: SortMode = 'date-desc';
+  let lastDeleted: { record: GiftRecord } | null = null;
 
   /** お返しを考えなくて良い季節の贈答 */
   const NO_RETURN_KINDS: Kind[] = ['chugen', 'seibo', 'newyear'];
@@ -132,6 +135,7 @@ export function createApp({ root, store, initialRecords, today, theme }: AppDeps
             <div class="controls">
               <label class="search">${icons.search}
                 <input type="search" id="filter-person" placeholder="相手・品物で探す" aria-label="記録を検索" /></label>
+              <select id="filter-year" aria-label="年で絞り込む"></select>
               <select id="filter-direction" aria-label="区分で絞り込む">
                 ${options(DIRECTION_LABELS, '', 'あげた・もらった両方')}
               </select>
@@ -339,6 +343,20 @@ export function createApp({ root, store, initialRecords, today, theme }: AppDeps
       </li>`;
   }
 
+  // 年の選択肢は記録から導くので、記録が変わるたびに作り直す。選んでいた年が
+  // 消えたら「すべての年」に戻す。
+  function renderYearFilter(): void {
+    const select = root.querySelector<HTMLSelectElement>('#filter-year');
+    if (!select) return;
+    const years = recordYears(records);
+    if (filterYear !== '' && !years.includes(filterYear)) filterYear = '';
+    const yearLabels = Object.fromEntries(years.map((y) => [y, `${y}年`])) as Record<
+      string,
+      string
+    >;
+    select.innerHTML = options(yearLabels, filterYear, 'すべての年');
+  }
+
   function renderList(animate = false): void {
     const region = root.querySelector('#records-list-region');
     if (!region) return;
@@ -346,6 +364,7 @@ export function createApp({ root, store, initialRecords, today, theme }: AppDeps
     const visible = sortRecords(records, sortMode).filter(
       (r) =>
         (filterDirection === '' || r.direction === filterDirection) &&
+        (filterYear === '' || r.date.startsWith(filterYear)) &&
         (query === '' || r.person.includes(query) || r.item.includes(query)),
     );
     const empty =
@@ -394,8 +413,12 @@ export function createApp({ root, store, initialRecords, today, theme }: AppDeps
     for (const el of region.querySelectorAll<HTMLElement>('[data-del]')) {
       el.addEventListener('click', () => {
         const idx = records.findIndex((r) => r.id === el.dataset.del);
-        if (idx >= 0) records.splice(idx, 1);
+        if (idx < 0) return;
+        const removed = records.splice(idx, 1)[0];
+        if (!removed) return;
+        lastDeleted = { record: removed };
         commit();
+        flashUndo(removed);
       });
     }
   }
@@ -409,6 +432,7 @@ export function createApp({ root, store, initialRecords, today, theme }: AppDeps
     renderStats();
     renderPending();
     renderPersons();
+    renderYearFilter();
     renderList();
   }
 
@@ -421,6 +445,23 @@ export function createApp({ root, store, initialRecords, today, theme }: AppDeps
     }, 2600);
   }
 
+  // 削除の直後に取り消しの機会を出す。誤って消した記録を元に戻せる。
+  function flashUndo(record: GiftRecord): void {
+    const msg = root.querySelector('#ledger-msg');
+    if (!msg) return;
+    msg.innerHTML = `「${esc(record.person)}」への記録を削除しました <button type="button" class="undo-button" id="undo-delete">取り消す</button>`;
+    root.querySelector('#undo-delete')?.addEventListener('click', () => {
+      if (lastDeleted?.record.id !== record.id) return;
+      records.push(record);
+      lastDeleted = null;
+      commit();
+      flash('削除を取り消しました');
+    });
+    window.setTimeout(() => {
+      if (msg.querySelector('#undo-delete')) msg.textContent = '';
+    }, 6000);
+  }
+
   function bindStaticEvents(): void {
     root.querySelector('#theme-toggle')?.addEventListener('click', () => {
       theme.cycle();
@@ -430,6 +471,10 @@ export function createApp({ root, store, initialRecords, today, theme }: AppDeps
     const search = root.querySelector<HTMLInputElement>('#filter-person');
     search?.addEventListener('input', () => {
       personQuery = search.value;
+      renderList();
+    });
+    root.querySelector('#filter-year')?.addEventListener('change', (e) => {
+      filterYear = (e.target as HTMLSelectElement).value;
       renderList();
     });
     root.querySelector('#filter-direction')?.addEventListener('change', (e) => {
@@ -523,6 +568,7 @@ export function createApp({ root, store, initialRecords, today, theme }: AppDeps
   renderStats(true);
   renderPending();
   renderPersons();
+  renderYearFilter();
   renderList(true);
   revealOnMount(root);
 }
