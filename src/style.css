@@ -259,6 +259,7 @@ svg {
 .masthead-figure {
   position: relative;
   margin: 0;
+  overflow: hidden;
 }
 
 .masthead-figure img {
@@ -437,10 +438,15 @@ svg {
   gap: 0.5rem 1.2rem;
   padding: 0.9rem 0;
   border-top: 1px solid var(--rule);
+  transition: background-color 0.2s var(--ease);
 }
 
 .pending-item:first-child {
   border-top: 0;
+}
+
+.pending-item:hover {
+  background: var(--paper-2);
 }
 
 .pending-date {
@@ -520,6 +526,14 @@ svg {
   font-weight: 600;
   letter-spacing: 0.08em;
   border-bottom-color: var(--rule-2);
+}
+
+.persons tbody tr {
+  transition: background-color 0.2s var(--ease);
+}
+
+.persons tbody tr:hover {
+  background: var(--paper-2);
 }
 
 .persons tbody tr:last-child th,
@@ -644,12 +658,35 @@ select:disabled {
 }
 
 .entry {
+  position: relative;
   padding: 0.85rem 0;
   border-top: 1px solid var(--rule);
+  transition: background-color 0.2s var(--ease);
 }
 
 .entry:first-child {
   border-top: 0;
+}
+
+/* ホバーで地色をわずかに変え、左端に区分色の細い印を出す */
+.entry:hover {
+  background: var(--paper-2);
+}
+
+.entry::before {
+  content: '';
+  position: absolute;
+  left: -0.75rem;
+  top: 0.85rem;
+  bottom: 0.85rem;
+  width: 2px;
+  background: var(--dir, var(--azuki));
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+}
+
+.entry:hover::before {
+  opacity: 0.55;
 }
 
 .entry-main {
@@ -810,6 +847,19 @@ select:disabled {
   font-weight: 600;
 }
 
+.undo-button {
+  border: 0;
+  background: none;
+  padding: 0 0 1px;
+  margin-left: 0.4rem;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--azuki);
+  cursor: pointer;
+  border-bottom: 1px solid currentColor;
+}
+
 /* ---- 脚注 ---- */
 
 .site-footer {
@@ -920,5 +970,50 @@ select:disabled {
 
   .pending-date {
     order: -1;
+  }
+}
+
+/* ---- 印刷 ---- */
+/* 台帳を紙に残せるよう、操作部や装飾を省いて読みやすく整える */
+@media print {
+  .topbar,
+  .masthead-figure,
+  .rule,
+  .controls,
+  .record-add,
+  .ledger-tools,
+  .hint,
+  .entry [data-del],
+  .ghost-button {
+    display: none;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .page {
+    max-width: none;
+    padding: 0;
+  }
+
+  .band {
+    padding: 1.2rem 0;
+    break-inside: avoid;
+  }
+
+  .entry,
+  .pending-item,
+  .persons tbody tr {
+    break-inside: avoid;
+  }
+
+  input,
+  select {
+    border: 0;
+    background: none;
+    color: #000;
+    appearance: none;
   }
 }
